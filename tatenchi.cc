@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <iterator>
 #include <regex>
 #include <string>
 #include <vector>
