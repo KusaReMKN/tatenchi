@@ -1,13 +1,32 @@
+#include <unistd.h>
+#include <sysexits.h>
+
 #include <algorithm>
+#include <cstdlib>
 #include <iostream>
 #include <regex>
 #include <string>
 #include <vector>
 
+[[noreturn]] void usage();
+
 int
 main(int argc, char *argv[])
 {
-	std::regex re("[[:space:]]");
+	const char *fs = "[[:space:]]+";
+
+	int c;
+	while ((c = getopt(argc, argv, "F:")) != -1)
+		switch (c) {
+		case 'F':
+			fs = optarg;
+			break;
+		case '?':
+		default:
+			usage();
+		}
+
+	std::regex fs_re(fs);
 
 	std::vector<std::vector<std::string>> table;
 	std::size_t maxCol = 0;
@@ -15,7 +34,7 @@ main(int argc, char *argv[])
 	while (std::getline(std::cin, line)) {
 		table.push_back({});
 
-		auto itr = std::sregex_token_iterator(line.begin(), line.end(), re, -1);
+		auto itr = std::sregex_token_iterator(line.begin(), line.end(), fs_re, -1);
 		auto end = std::sregex_token_iterator();
 		std::size_t curCol = 0;
 		for (; itr != end; curCol++, itr++)
@@ -34,4 +53,11 @@ main(int argc, char *argv[])
 	}
 
 	return 0;
+}
+
+[[noreturn]] void
+usage()
+{
+	std::clog << "usage: tatenchi [-F pattern]" << std::endl;
+	std::exit(EX_USAGE);
 }
