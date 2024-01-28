@@ -1,0 +1,43 @@
+.\"
+.ds lang ja_JP.UTF-8
+.mso 
+.mso ja.tmac
+.Dd January 28, 2024
+.Dt TATENCHI 1
+.Os
+.Sh 名称
+.Nm tatenchi
+.Nd 整形済の表データを転置する
+.Sh 書式
+.Nm
+.Op Fl B | Fl G | Fl E | Fl J
+.Op Fl F Ar pattern
+.Sh 解説
+.Nm
+ユーティリティは、標準入力から整形済の表データを読み込み、行と列を入れ替えたものを標準出力に書き込みます。
+.Pp
+以下のオプションを利用できます:
+.Bl -tag
+.It Fl B , Fl G
+パターンを基本正規表現
+.Pq "basic regular expression"
+として扱います。
+これがデフォルトです。
+.It Fl E
+パターンを拡張正規表現
+.Pq "extended regular expression"
+として扱います。
+.It Fl F Ar pattern
+入力される表のフィールド（列）を区切るパターンを指定します。
+デフォルトのパターンは
+.Ql "[[:space:]][[:space:]]*"
+です。
+.It Fl J
+パターンを ECMA-262 仕様第 3 版の ECMAScript 言語で使用されている正規表現として扱います。
+.El
+.Sh 診断
+.Ex -std
+.Sh バグ
+オプション
+.Fl J
+を指定した場合、デフォルトのパターンはうまく動作しないはずです。
