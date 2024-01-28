@@ -13,20 +13,31 @@
 int
 main(int argc, char *argv[])
 {
-	const char *fs = "[[:space:]]+";
+	auto re_type = std::regex_constants::basic;
+	auto *fs = "[[:space:]][[:space:]]*";
 
 	int c;
-	while ((c = getopt(argc, argv, "F:")) != -1)
+	while ((c = getopt(argc, argv, "BEF:GJ")) != -1)
 		switch (c) {
+		case 'B':
+		case 'G':
+			re_type = std::regex_constants::basic;
+			break;
+		case 'E':
+			re_type = std::regex_constants::extended;
+			break;
 		case 'F':
 			fs = optarg;
+			break;
+		case 'J':
+			re_type = std::regex_constants::ECMAScript;
 			break;
 		case '?':
 		default:
 			usage();
 		}
 
-	std::regex fs_re(fs);
+	std::regex fs_re(fs, re_type);
 
 	std::vector<std::vector<std::string>> table;
 	std::size_t maxCol = 0;
@@ -58,6 +69,6 @@ main(int argc, char *argv[])
 [[noreturn]] void
 usage()
 {
-	std::clog << "usage: tatenchi [-F pattern]" << std::endl;
+	std::clog << "usage: tatenchi [-B|-G|-E|-J] [-F pattern]" << std::endl;
 	std::exit(EX_USAGE);
 }
